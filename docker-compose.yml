@@ -4,11 +4,14 @@ services:
   nginx:
     image: nginx:latest
     ports:
-    - 127.0.0.1:81:80
+    - 80:80
     volumes:
     - ./www:/var/www/html
     - ./conf/nginx:/etc/nginx/conf.d
     - ./logs/nginx:/var/log/nginx
+    networks:
+    - front
+    - private
     links:
     - php-fpm
 
@@ -16,7 +19,10 @@ services:
     build:
       context: php-fpm
     volumes:
-    - ./www:/var/www/html
+    - ./www:/var/www/
+    networks:
+      private:
+        ipv4_address: 172.20.0.11    
     links:
     - mariadb-srv
 
@@ -31,13 +37,27 @@ services:
       MYSQL_PASSWORD: userpass
     volumes:
     - ./databases/mariadb:/var/lib/mysql
-      
+    networks:
+      private:
+        ipv4_address: 172.20.0.12  
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin:latest
-    ports:
-    - 127.0.0.1:8081:80
+#    ports:
+#    - 127.0.0.1:8081:80
     environment:
       PMA_HOST: mariadb-srv
-      PMA_USER: user_test
-      PMA_PASSWORD: userpass
+#      PMA_USER:
+#      PMA_PASSWORD:
+    networks:
+      private:
+        ipv4_address: 172.20.0.13      
+
+networks:
+  front:
+    external:
+      name: front
+  private:
+    ipam:
+      config:
+        - subnet: 172.20.0.0/24
