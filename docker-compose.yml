@@ -9,12 +9,16 @@ services:
     - ./www:/var/www/html
     - ./conf/nginx:/etc/nginx/conf.d
     - ./logs/nginx:/var/log/nginx
+    links:
+    - php-fpm
 
   php-fpm:
     build:
       context: php-fpm
     volumes:
     - ./www:/var/www/html
+    links:
+    - mariadb-srv
 
   mariadb-srv:
     image: mariadb:latest
