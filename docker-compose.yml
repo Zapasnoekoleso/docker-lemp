@@ -20,6 +20,7 @@ services:
       context: php-fpm
     volumes:
     - ./www:/var/www/
+    - ./logs/php-fpm:/var/log/php
     networks:
       private:
         ipv4_address: 172.20.0.11    
@@ -33,13 +34,15 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: rootpass
       MYSQL_DATABASE: testsite
-      MYSQL_USER: user_test
-      MYSQL_PASSWORD: userpass
+      MYSQL_USER: user
+      MYSQL_PASSWORD: pass
     volumes:
     - ./databases/mariadb:/var/lib/mysql
+    - ./logs/Mysql:/var/log/mysql
     networks:
       private:
-        ipv4_address: 172.20.0.12  
+        ipv4_address: 172.20.0.12 
+
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin:latest
@@ -51,7 +54,7 @@ services:
 #      PMA_PASSWORD:
     networks:
       private:
-        ipv4_address: 172.20.0.13      
+        ipv4_address: 172.20.0.13    
 
 networks:
   front:
