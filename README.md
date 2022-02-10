@@ -10,4 +10,4 @@ Before use:
 127.0.0.1 site.docker.ru
 127.0.0.1 pma.docker.ru
 
-Magic
+#Magic
